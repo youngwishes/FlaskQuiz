@@ -1,21 +1,25 @@
-from flask import Flask, request
-from flask_sqlalchemy import SQLAlchemy
+from flask import request
+from config import app, api
+from api import QuizClient
+from models import QuizQuestion
+from flask_restful import Resource, Api
 
-db = SQLAlchemy()
+api_client = QuizClient()
 
-app = Flask(__name__)
 
-app['SQLALCHEMY_DATABASE_URI'] = 'postgresql+psycopg2://admin:1234@localhost:5432/bewisetask1'
+class Quiz(Resource):
+    def post(self):
+        request_data = request.json
+        questions_count = request_data.get('questions_count')
+        if not questions_count:
+            return 'Не указан параметр [questions_count]', 400
+        new_questions = QuizQuestion.get_ids_set()
 
-@app.route('/question', methods=['POST'])
-def save_question():
-    request_data = request.get_json()
-    questions_num = request_data.get('questions_num')
-    if questions_num:
-        print('OK')
-    print(request_data)
-    return 'Some answer', 201
+        print(new_questions)
+        return 1
 
+
+api.add_resource(Quiz, '/api/quiz')
 
 if __name__ == '__main__':
     app.run()
