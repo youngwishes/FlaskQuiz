@@ -8,13 +8,14 @@ class QuizClient:
     def __init__(self) -> None:
         self._session = requests.Session()
 
-    def get_new_questions(self, count: int) -> dict:
+    def get_new_questions(self, count: int) -> list[dict]:
         response = self._session.get(self.URL, timeout=self.TIMEOUT, params={'count': count})
-        questions = {}
+        questions = []
         for q in response.json():
-            questions[q['id']] = {
+            questions.append({
+                'id': q['id'],
                 'question': q['question'],
                 'answer': q['answer'],
                 'created_at': q['created_at']
-            }
+            })
         return questions

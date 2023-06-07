@@ -1,6 +1,7 @@
-from typing import Iterable
+from typing import Iterable, Any, Dict
 from config import db
 import datetime
+from marshmallow import Schema
 
 
 class QuizQuestion(db.Model):
@@ -25,9 +26,28 @@ class QuizQuestion(db.Model):
         return set(db.session.query(QuizQuestion.id).all())
 
     @classmethod
+    def add_new_question(cls, data: dict):
+        q = QuizQuestion(**data)
+        db.session.add(q)
+        db.session.commit()
+
+    @classmethod
     def insert_data(cls, data: Iterable):
-        db.session.bulk_insert_mappings(QuizQuestion, data)
-        cls.mark_data_as_prev(data=data)
+        cleared_data = []
+        for question in data:
+            instance = db.session.query(QuizQuestion).filter(QuizQuestion.id == question['id']).one_or_none()
+            if instance is None:
+                cleared_data.append(question)
+        if cleared_data:
+            db.session.bulk_insert_mappings(QuizQuestion, cleared_data)
+            cls.mark_data_as_prev(data=cleared_data)
+            db.session.commit()
+        else:
+            return False
+
+    @classmethod
+    def delete_all(cls):
+        db.session.query(QuizQuestion).delete()
         db.session.commit()
 
     @classmethod
