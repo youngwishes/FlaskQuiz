@@ -1,7 +1,6 @@
 from typing import Iterable, Any, Dict
 from config import db
 import datetime
-from marshmallow import Schema
 
 
 class QuizQuestion(db.Model):
@@ -22,49 +21,42 @@ class QuizQuestion(db.Model):
     created_at = db.Column(db.Date)
 
     @classmethod
-    def get_ids_set(cls) -> set:
-        return set(db.session.query(QuizQuestion.id).all())
+    def get_by_id(cls, id: int) -> Any:
+        return db.session.query(QuizQuestion.id).filter(QuizQuestion.id == id).one_or_none()
 
     @classmethod
-    def add_new_question(cls, data: dict):
+    def add_new_question(cls, data: dict) -> None:
         q = QuizQuestion(**data)
         db.session.add(q)
         db.session.commit()
 
     @classmethod
-    def insert_data(cls, data: Iterable):
-        cleared_data = []
-        for question in data:
-            instance = db.session.query(QuizQuestion).filter(QuizQuestion.id == question['id']).one_or_none()
-            if instance is None:
-                cleared_data.append(question)
-        if cleared_data:
-            db.session.bulk_insert_mappings(QuizQuestion, cleared_data)
-            cls.mark_data_as_prev(data=cleared_data)
-            db.session.commit()
-        else:
-            return False
+    def insert_data(cls, data: Iterable) -> bool:
+        db.session.bulk_insert_mappings(QuizQuestion, data)
+        cls.mark_data_as_prev(data=data)
+        db.session.commit()
+        return True
 
     @classmethod
-    def delete_all(cls):
+    def delete_all(cls) -> None:
         db.session.query(QuizQuestion).delete()
         db.session.commit()
 
     @classmethod
-    def mark_data_as_prev(cls, data: Iterable):
+    def mark_data_as_prev(cls, data: Iterable) -> None:
         cls.prev_data = cls.temp_data
         cls.temp_data = data
 
     @classmethod
-    def get_prev_data(cls):
+    def get_prev_data(cls) -> list:
         return cls.prev_data
 
     @classmethod
-    def get_all_questions(cls):
+    def get_all_questions(cls) -> list:
         return db.session.query(QuizQuestion).all()
 
     def __repr__(self) -> str:
         return '<Quiz(id={id}, question={qtext})>'.format(id=self.id, qtext=self.question)
 
-    def to_json(self):
+    def to_json(self) -> dict:
         return {c.name: getattr(self, c.name) for c in self.__table__.columns}

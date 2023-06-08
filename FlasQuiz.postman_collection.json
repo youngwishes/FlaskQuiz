@@ -1,0 +1,110 @@
+{
+	"info": {
+		"_postman_id": "2210b665-25aa-4985-9c8b-92cc22224e02",
+		"name": "FlasQuiz",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "22216980"
+	},
+	"item": [
+		{
+			"name": "Add questions",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"questions_count\": 2\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{host}}/api/quiz",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"api",
+						"quiz"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "All quiz",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{host}}/api/quiz",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"api",
+						"quiz"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "TestExistedQuestion",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "    {\n        \"answer\": \"a bush baby\",\n        \"created_at\": \"Fri, 30 Dec 2022 00:00:00 GMT\",\n        \"id\": 160961,\n        \"question\": \"A small nocturnal primate of the genus Galago with dense fur & large round eyes\"\n    }",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{host}}/api/quiz/testexisted",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"api",
+						"quiz",
+						"testexisted"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "host",
+			"value": "http://127.0.0.1:5000",
+			"type": "string"
+		}
+	]
+}
