@@ -54,4 +54,4 @@ api.add_resource(Quiz, '/api/quiz')
 if __name__ == '__main__':
     with app.app_context():
         QuizQuestion.delete_all()
-    app.run()
+    app.run(host="0.0.0.0")

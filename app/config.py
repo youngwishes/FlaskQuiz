@@ -12,7 +12,7 @@ class Config:
     TESTING = False
     CSRF_ENABLED = True
     SECRET_KEY = os.environ.get('SECRET_KEY', '68f3acbf-2f87-4e5c-a7d6-f1f09526440f')
-    SQLALCHEMY_DATABASE_URI = 'postgresql+psycopg2://flaskquiz:1234@localhost:5432/flaskquiz'
+    SQLALCHEMY_DATABASE_URI = os.environ.get('SQLALCHEMY_DATABASE_URI')
 
 
 class ProductionConfig(Config):
@@ -35,7 +35,7 @@ class TestingConfig(Config):
 
 app = Flask(__name__)
 
-app.config.from_object('config.DevelopmentConfig')
+app.config.from_object(DevelopmentConfig)
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 api = Api(app)

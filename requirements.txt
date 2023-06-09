@@ -10,6 +10,7 @@ Flask-RESTful==0.3.10
 Flask-Script==2.0.6
 Flask-SQLAlchemy==3.0.3
 greenlet==2.0.2
+gunicorn==20.1.0
 idna==3.4
 itsdangerous==2.1.2
 Jinja2==3.1.2
