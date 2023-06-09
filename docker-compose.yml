@@ -4,6 +4,7 @@ services:
 
   app:
     build: .
+    image: youngwishes/flask_quiz
     container_name: quiz_app
     restart: always
     ports:

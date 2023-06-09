@@ -2,13 +2,17 @@ FROM python:3.10-slim-buster
 
 RUN apt-get update && apt-get install -y libpq-dev build-essential
 
-WORKDIR /usr/src/app
+RUN apt install -y git
 
-COPY requirements.txt /usr/src/app
+WORKDIR /usr/src/
+
+RUN git init .
+RUN git remote add origin https://github.com/777boeing777/FlaskQuiz.git
+RUN git pull origin main
 
 RUN pip install --upgrade pip && python -m pip install -r requirements.txt
 
-COPY app /usr/src/app
+WORKDIR /usr/src/app/
 
 ENV SQLALCHEMY_DATABASE_URI="postgresql+psycopg2://flaskquiz:12345@localhost:5432/flaskquiz"
 
